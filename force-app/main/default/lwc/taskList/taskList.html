@@ -1,0 +1,42 @@
+<!-- Individual List -->
+<template>
+    <div class="container">
+        <lightning-layout horizontal-align="spaced" multiple-rows="true">
+
+            <!-- List Header -->
+            <lightning-layout-item size="12" class="slds-p-right_small">
+                <div class="page-section page-header">
+                    <div class="slds-global-header slds-grid slds-grid_align-spread">
+                        
+                        <!-- List Name -->
+                        <div class="slds-global-header__item">
+                            {listName}
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="slds-p-around_medium lgc-bg">
+                            <lightning-button-menu alternative-text="Show menu">
+                                <lightning-menu-subheader label="Header Alpha"></lightning-menu-subheader>
+                                <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
+                                <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
+                                <lightning-menu-subheader label="Header Beta"></lightning-menu-subheader>
+                                <lightning-menu-item value="MenuItemThree" label="Menu Item Three"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </div>
+
+                    </div>
+                </div>
+            </lightning-layout-item>
+
+            <!-- Task -->
+            <lightning-layout-item size="12" padding="around-small">
+                <template for:each={taskList} for:item="task">
+                    <c-task-card key={task.description} task={task}></c-task-card>
+                </template>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </div>
+</template>
+
+
