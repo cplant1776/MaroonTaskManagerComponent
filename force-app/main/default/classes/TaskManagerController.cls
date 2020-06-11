@@ -1,20 +1,19 @@
 public with sharing class TaskManagerController {
 
     @AuraEnabled
-    public static List<ToDoListWithTasks> getUserToDoLists()
+    public static List<ToDoListWithTasks> getUserToDoLists(String source)
     {
         Set<Id> userSpecificTodoListIds = getUserSpecificTodoListIds();
 
         List<To_Do_List__c> todoLists = [SELECT Id, Name,
-        (SELECT Id, Name FROM To_Do_Tasks__r)
+        (SELECT Id, Name, Description__c FROM To_Do_Tasks__r)
         FROM To_Do_List__c
         WHERE Id IN :userSpecificTodoListIds];
 
         return wrapToDoLists(todoLists);
     }
     
-    @AuraEnabled
-    public static List<ToDoListWithTasks> wrapToDoLists(List<To_Do_List__c> todoLists)
+    private static List<ToDoListWithTasks> wrapToDoLists(List<To_Do_List__c> todoLists)
     {
         List<ToDoListWithTasks> result = new List<ToDoListWithTasks>();
 
@@ -22,7 +21,8 @@ public with sharing class TaskManagerController {
         {
             ToDoListWithTasks todoList = new ToDoListWithTasks();
             todoList.listName = eachList.Name;
-            todoList.listTasks = eachList.To_Do_Tasks__r;
+            todoList.taskListId = eachList.Id;
+            todoList.taskList = eachList.To_Do_Tasks__r;
             result.add(todoList);
         }
 
@@ -47,14 +47,5 @@ public with sharing class TaskManagerController {
         }
 
         return result;
-    }
-
-    //Wrapper class for returning TDLists with associated TDTasks
-    public class ToDoListWithTasks
-    {
-        @AuraEnabled
-        public String listName;
-        @AuraEnabled
-        public List<To_Do_Task__c> listTasks;
     }
 }

@@ -15,12 +15,21 @@ insert todoLists;
 
 // Tasks
 List<To_Do_Task__c> todoTasks = new List<To_Do_Task__c>();
-todoTasks.add(new To_Do_Task__c(Name='Task 1', To_Do_List__c=todoLists[0].id));
-todoTasks.add(new To_Do_Task__c(Name='Task 2', To_Do_List__c=todoLists[0].id));
-todoTasks.add(new To_Do_Task__c(Name='Task 3', To_Do_List__c=todoLists[0].id));
-todoTasks.add(new To_Do_Task__c(Name='Task 4', To_Do_List__c=todoLists[1].id));
+todoTasks.add(new To_Do_Task__c(Name='Task 1', To_Do_List__c=todoLists[0].id, Description__c='Task 1 Description'));
+todoTasks.add(new To_Do_Task__c(Name='Task 2', To_Do_List__c=todoLists[0].id, Description__c='Task 2 Description'));
+todoTasks.add(new To_Do_Task__c(Name='Task 3', To_Do_List__c=todoLists[0].id, Description__c='Task 3 Description'));
+todoTasks.add(new To_Do_Task__c(Name='Task 4', To_Do_List__c=todoLists[1].id, Description__c='Task 4 Description'));
 insert todoTasks;
 
 // Users To Do Lists
-User_To_Do_List__c userList = new User_To_Do_List__c(Name='List1 Link', To_Do_List__c=todoLists[0].id, User__c=userId);
-insert userList;
+List<User_To_Do_List__c> userLists = new List<User_To_Do_List__c>();
+userLists.add(new User_To_Do_List__c(Name='List1 Link', To_Do_List__c=todoLists[0].id, User__c=userId));
+userLists.add(new User_To_Do_List__c(Name='List2 Link', To_Do_List__c=todoLists[1].id, User__c=userId));
+insert userLists;
+
+Id userId = UserInfo.getUserId();
+
+List<User_To_Do_List__c> userLists = new List<User_To_Do_List__c>();
+To_Do_List__c list2 = [SELECT Id FROM To_Do_List__c WHERE Name = 'List2'];
+userLists.add(new User_To_Do_List__c(Name='List2 Link', To_Do_List__c=list2.id, User__c=userId));
+insert userLists;
