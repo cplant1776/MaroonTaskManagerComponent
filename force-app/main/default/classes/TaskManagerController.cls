@@ -1,34 +1,49 @@
 public with sharing class TaskManagerController {
 
     @AuraEnabled
-    public static List<ToDoListWithTasks> getAllToDoLists()
+    public static List<ToDoListWithTasks> getUserToDoLists()
     {
-        Id userId = UserInfo.getUserId();
-        List<User_To_Do_List__c> userTodoListsWithIds = [SELECT Id, To_Do_List__r.Id FROM User_To_Do_List__c WHERE User__c = :userId];
-        Set<Id> userTodoListIds = new Set<Id>();
-        for(User_To_Do_List__c eachUserTodoList : userTodoListsWithIds)
-        {
-            userTodoListIds.add(eachUserTodoList.To_Do_List__r.Id);
-        }
+        Set<Id> userSpecificTodoListIds = getUserSpecificTodoListIds();
 
         List<To_Do_List__c> todoLists = [SELECT Id, Name,
         (SELECT Id, Name FROM To_Do_Tasks__r)
         FROM To_Do_List__c
-        WHERE Id IN :userTodoListIds];
+        WHERE Id IN :userSpecificTodoListIds];
 
-        return getToDoLists(todoLists);
+        return wrapToDoLists(todoLists);
     }
     
     @AuraEnabled
-    public static List<ToDoListWithTasks> getToDoLists(List<To_Do_List__c> todoLists)
+    public static List<ToDoListWithTasks> wrapToDoLists(List<To_Do_List__c> todoLists)
     {
         List<ToDoListWithTasks> result = new List<ToDoListWithTasks>();
+
         for (To_Do_List__c eachList : todoLists)
         {
             ToDoListWithTasks todoList = new ToDoListWithTasks();
             todoList.listName = eachList.Name;
             todoList.listTasks = eachList.To_Do_Tasks__r;
             result.add(todoList);
+        }
+
+        return result;
+    }
+
+    private static Set<Id> getUserSpecificTodoListIds()
+    {
+        // Declarations
+        Set<Id> result = new Set<Id>();
+        Id userId = UserInfo.getUserId();
+
+        // Get To Do Lists associated w/ logged in user
+        List<User_To_Do_List__c> userTodoListsWithIds = [SELECT Id, To_Do_List__r.Id 
+        FROM User_To_Do_List__c 
+        WHERE User__c = :userId];
+
+        // Extract Id for each To Do List
+        for(User_To_Do_List__c eachUserTodoList : userTodoListsWithIds)
+        {
+            result.add(eachUserTodoList.To_Do_List__r.Id);
         }
 
         return result;
