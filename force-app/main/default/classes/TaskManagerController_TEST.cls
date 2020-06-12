@@ -35,7 +35,25 @@ public with sharing class TaskManagerController_TEST {
     {
         List<ToDoListWithTasks> todoLists = TaskManagerController.getUserToDoLists('abc');
         System.debug(todoLists);
-        System.assertEquals(NUM_OF_TASKS_LIST_1, todoLists[0].listTasks.size());
-        System.assertEquals(NUM_OF_TASKS_LIST_2, todoLists[1].listTasks.size());
+        System.assertEquals(NUM_OF_TASKS_LIST_1, todoLists[0].taskList.size());
+        System.assertEquals(NUM_OF_TASKS_LIST_2, todoLists[1].taskList.size());
+    }
+
+    @isTest
+    static void doesMoveTodoTaskUpdateTaskLists()
+    {
+        To_Do_Task__c movedTask = [SELECT Id FROM To_Do_Task__c WHERE Name = 'Task 1'];
+        To_Do_List__c oldList = [SELECT Id FROM To_Do_List__c WHERE Name = 'List1'];
+        To_Do_List__c newList = [SELECT Id FROM To_Do_List__c WHERE Name = 'List2'];
+
+        Test.startTest();
+        TaskManagerController.moveTodoTask(movedTask.Id, newList.Id);
+        Test.stopTest();
+
+        oldList = [SELECT Id, (SELECT Id FROM To_Do_Tasks__r) FROM To_Do_List__c WHERE Name = 'List1'];
+        newList = [SELECT Id, (SELECT Id FROM To_Do_Tasks__r) FROM To_Do_List__c WHERE Name = 'List2'];
+
+        System.assertEquals(NUM_OF_TASKS_LIST_1 - 1, oldList.To_Do_Tasks__r.size());
+        System.assertEquals(NUM_OF_TASKS_LIST_2 + 1, newList.To_Do_Tasks__r.size());
     }
 }
