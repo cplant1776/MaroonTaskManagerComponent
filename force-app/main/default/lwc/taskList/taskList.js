@@ -10,4 +10,11 @@ export default class TaskList extends LightningElement {
         
     }
 
+    handleMoveTask(event)
+    {
+        console.log('Caught in TaskList');
+        const moveEvent = new CustomEvent('movetask', {detail: event.detail});
+        this.dispatchEvent(moveEvent);
+    }
+
 }

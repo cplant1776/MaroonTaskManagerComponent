@@ -9,6 +9,13 @@ export default class TaskManager extends LightningElement {
         this.fetchUserTodoLists();
     }
 
+    handleMoveTask(event)
+    {
+        console.log('Caught in taskManager');
+        console.log('Event detail: ' + event.detail);
+        
+    }
+
     fetchUserTodoLists()
     {
         getUserToDoLists({source: 'placeholder'}).then(result => {

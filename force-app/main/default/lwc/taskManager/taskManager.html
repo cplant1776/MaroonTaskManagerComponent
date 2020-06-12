@@ -2,7 +2,8 @@
     <div class="container">
         <lightning-layout>
         <template for:each={taskLists} for:item="taskList">
-            <c-task-list key={taskList.taskListId} list-name={taskList.listName} task-list={taskList.taskList} task-list-id={taskList.taskListId}></c-task-list>
+            <c-task-list key={taskList.taskListId} list-name={taskList.listName} task-list={taskList.taskList}
+            task-list-id={taskList.taskListId} onmovetask={handleMoveTask}></c-task-list>
         </template>
         </lightning-layout>
     </div>
