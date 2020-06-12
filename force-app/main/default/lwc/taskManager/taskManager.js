@@ -6,7 +6,6 @@ export default class TaskManager extends LightningElement {
 
     connectedCallback()
     {
-        // this.populateDummyData();
         this.fetchUserTodoLists();
     }
 
@@ -24,45 +23,5 @@ export default class TaskManager extends LightningElement {
             console.log("Error fetching user todo lists!");
             console.log(error);
         });
-    }
-
-    populateDummyData()
-    {
-        const taskLists = [
-            {
-                listName: 'LIST 1 BRO',
-                taskListId: '123',
-                taskList:
-                [
-                    {
-                        description: 'list 1 task 1'
-                    },
-                    {
-                        description: 'list 1 task 2'
-                    },
-                    {
-                        description: 'list 1 task 3'
-                    },
-                    {
-                        description: 'list 1 task 4'
-                    }
-                ]
-            },
-            {
-                listName: 'LIST 2 BRO',
-                taskListId: 'abc',
-                taskList:
-                [
-                    {
-                        description: 'list 2 task 1'
-                    },
-                    {
-                        description: 'list 2 task 2'
-                    }
-                ]
-            }
-        ];
-
-        this.taskLists = taskLists;
     }
 }

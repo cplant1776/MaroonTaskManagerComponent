@@ -6,5 +6,5 @@ public class ToDoListWithTasks
     @AuraEnabled
     public String taskListId;
     @AuraEnabled
-    public List<To_Do_Task__c> taskList;
+    public List<ToDoTask> taskList;
 }

@@ -22,7 +22,18 @@ public with sharing class TaskManagerController {
             ToDoListWithTasks todoList = new ToDoListWithTasks();
             todoList.listName = eachList.Name;
             todoList.taskListId = eachList.Id;
-            todoList.taskList = eachList.To_Do_Tasks__r;
+
+            // Add tasks
+            List<ToDoTask> todoTasks = new List<ToDoTask>();
+            for(To_Do_Task__c eachTask : eachList.To_Do_Tasks__r)
+            {
+                ToDoTask currentTask = new ToDoTask();
+                currentTask.taskId = eachTask.Id;
+                currentTask.taskName = eachTask.Name;
+                currentTask.description = eachTask.Description__c;
+                todoTasks.add(currentTask);
+            }
+            todoList.taskList = todoTasks;
             result.add(todoList);
         }
 
