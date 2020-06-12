@@ -64,7 +64,7 @@ public with sharing class TaskManagerController {
     public static void moveTodoTask(Id taskId, Id targetListId){
 
         try{
-            System.debug('Try updating task');
+            System.debug('Try updating task:' + taskId);
             To_Do_Task__c task = [SELECT Id, To_Do_List__c FROM To_Do_Task__c
             WHERE Id = :taskId LIMIT 1];
     

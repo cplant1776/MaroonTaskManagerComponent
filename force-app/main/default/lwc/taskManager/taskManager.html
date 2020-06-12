@@ -3,7 +3,7 @@
         <lightning-layout>
         <template for:each={taskLists} for:item="taskList">
             <c-task-list key={taskList.taskListId} list-name={taskList.listName} task-list={taskList.taskList}
-            task-list-id={taskList.taskListId} onmovetask={handleMoveTask} onlistitemdrag={handleListItemDrag}
+            task-list-id={taskList.taskListId} onlistitemdrag={handleListItemDrag}
             onitemdrop={handleItemDrop}></c-task-list>
         </template>
         </lightning-layout>

@@ -10,18 +10,9 @@ export default class TaskList extends LightningElement {
         
     }
 
-    handleMoveTask(event)
-    {
-        console.log('Caught in TaskList');
-        const moveEvent = new CustomEvent('movetask', {detail: event.detail});
-        this.dispatchEvent(moveEvent);
-    }
-
     handleItemDrag(event)
     {
-        console.log('taskList :: item drag');
-        console.log(event.detail);
-        
+        console.log('taskList :: item drag');        
 
         const itemDragEvent = new CustomEvent('listitemdrag', {detail: event.detail});
         this.dispatchEvent(itemDragEvent);

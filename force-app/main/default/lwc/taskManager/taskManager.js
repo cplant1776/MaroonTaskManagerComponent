@@ -9,9 +9,7 @@ export default class TaskManager extends LightningElement {
     connectedCallback()
     {
         this.fetchUserTodoLists();
-        console.log('this.taskLists:');
         console.log(this.taskLists);
-        // console.log(JSON.parse(JSON.stringify(this.taskLists)));
     }
     
     handleMoveTask(event)
@@ -48,15 +46,38 @@ export default class TaskManager extends LightningElement {
     handleItemDrop(event)
     {
         let targetListId = event.detail;
-        console.log('taskManager :: handleItemDrop => ' +  targetListId);
-        console.log(this.draggingTask);
-        
-        console.log(this.taskLists);
-
         let droppedTask = this.draggingTask;
+        console.log('taskManager :: handleItemDrop => ' +  targetListId);
 
         // Remove dropped task from its current task list
-        let updatedTaskLists = this.taskLists.map(list => {
+        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask);
+        // Add dropped task to target task list
+        updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
+        // Update local task lists
+        this.taskLists = updatedTaskLists;
+        
+        
+        // Update task list in database
+        moveTodoTask({taskId: droppedTask.taskId, targetListId: targetListId}).then(result => {
+            console.log('Successfully moved task.');
+            console.log(result);
+        }).catch(error => {
+            console.log('Error moving task!');
+            console.log(error);
+        });
+        
+    }
+
+    handleListItemDrag(event)
+    {        
+        console.log('taskManager :: handle list item drag ' + event.detail.taskId);
+        this.draggingTask = event.detail;
+    }
+
+    filterOutTargetTask(taskLists, droppedTask)
+    {
+        // Remove dropped task from its current task list
+        let result = taskLists.map(list => {
             // Filter out task if present in list
             list.taskList = list.taskList.filter(task => {
                 return task.taskId == droppedTask.taskId ? false : true;         
@@ -64,8 +85,13 @@ export default class TaskManager extends LightningElement {
             return list;
         });
 
-        // Add dropped task to target task list
-        updatedTaskLists.some(list => {
+        return result;
+    }
+
+    addDroppedTaskToTargetList(taskLists, targetListId, droppedTask)
+    {
+        let result = taskLists;
+        result.some(list => {
             if(list.taskListId == targetListId)
             {
                 list.taskList.push(droppedTask);
@@ -73,13 +99,6 @@ export default class TaskManager extends LightningElement {
             }
         });
 
-        // this.taskLists = JSON.parse(JSON.stringify(updatedTaskLists));
-        this.taskLists = updatedTaskLists;        
-    }
-
-    handleListItemDrag(event)
-    {        
-        console.log('taskManager :: handle list item drag ' + event.detail.taskId);
-        this.draggingTask = event.detail;
+        return result;
     }
 }
