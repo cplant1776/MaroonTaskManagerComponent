@@ -30,4 +30,15 @@ export default class TaskList extends LightningElement {
         this.dispatchEvent(itemDropEvent);
     }
 
+    handleSubmitModal(event)
+    {
+        console.log('taskList :: handleSubmitModal');
+
+        let taskFields = event.detail;
+        taskFields.taskListId = this.taskListId;
+
+        const submitModalEvent = new CustomEvent('submitmodal', {detail: taskFields});
+        this.dispatchEvent(submitModalEvent);
+    }
+
 }

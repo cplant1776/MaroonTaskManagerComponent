@@ -11,21 +11,6 @@ export default class TaskManager extends LightningElement {
         this.fetchUserTodoLists();
         console.log(this.taskLists);
     }
-    
-    handleMoveTask(event)
-    {
-        console.log('Caught in taskManager');
-        console.log('Event detail: ' + event.detail);
-
-        const targetListId = 'a000R00000341ttQAA';
-        moveTodoTask({taskId: event.detail, targetListId: targetListId}).then(result => {
-            console.log('Successfully moved task.');
-            console.log(result);
-        }).catch(error => {
-            console.log('Error moving task!');
-            console.log(error);
-        });
-    }
 
     fetchUserTodoLists()
     {
@@ -72,6 +57,35 @@ export default class TaskManager extends LightningElement {
     {        
         console.log('taskManager :: handle list item drag ' + event.detail.taskId);
         this.draggingTask = event.detail;
+    }
+
+    handleSubmitModal(event)
+    {
+        console.log('taskManager :: handleSubmitModal');
+        // console.log(event.detail);
+        let taskFields = event.detail;
+
+        // TODO: SOMETHING IS WRONG WITH THE RETURN ON THIS...
+        // TRYING TO UPDATE TASK PASSED UP IN EVENT.DETAIL
+        let updatedTaskLists = this.taskLists;
+        updatedTaskLists.some(list => {
+            // Find updated task's list
+            if(list.taskListId == taskFields.taskListId)
+            {
+                // Find and update task
+                list.taskList.some(task => {
+                    if(task.taskId == taskFields.taskId)
+                    {
+                        task.taskName = taskFields.Name;
+                        task.description = taskFields.Description__c;
+                        return true;
+                    }
+                });
+            }
+            return true;
+        });
+
+        this.taskLists = updatedTaskLists;
     }
 
     filterOutTargetTask(taskLists, droppedTask)

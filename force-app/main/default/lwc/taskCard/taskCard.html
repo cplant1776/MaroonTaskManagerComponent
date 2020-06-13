@@ -1,5 +1,9 @@
 <template>
-    <div draggable="true" ondragstart={handleDragStart}>
+    <template if:true={openModal}>
+        <c-task-modal task={task} onsubmit={handleSubmitModal} oncancelmodal={handleCancelModal}></c-task-modal>
+    </template>
+
+    <div draggable="true" ondragstart={handleDragStart} onclick={handleOpenModal}>
         <lightning-card  title={task.description} draggable="true">
             <!-- Header -->
             <!-- <lightning-button label="New" slot="actions"></lightning-button> -->

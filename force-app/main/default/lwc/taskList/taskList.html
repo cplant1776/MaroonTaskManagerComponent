@@ -31,7 +31,7 @@
             <!-- Task -->
             <lightning-layout-item size="12" padding="around-small">
                 <template for:each={taskList} for:item="task">
-                    <c-task-card key={task.description} task={task} onitemdrag={handleItemDrag}></c-task-card>
+                    <c-task-card key={task.description} task={task} onitemdrag={handleItemDrag} onsubmitmodal={handleSubmitModal}></c-task-card>
                 </template>
             </lightning-layout-item>
 
