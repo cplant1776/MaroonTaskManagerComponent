@@ -33,14 +33,6 @@ export default class TaskManager extends LightningElement {
         let targetListId = event.detail;
         let droppedTask = this.draggingTask;
         console.log('taskManager :: handleItemDrop => ' +  targetListId);
-
-        // Remove dropped task from its current task list
-        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask);
-        // Add dropped task to target task list
-        updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
-        // Update local task lists
-        this.taskLists = updatedTaskLists;
-        
         
         // Update task list in database
         moveTodoTask({taskId: droppedTask.taskId, targetListId: targetListId}).then(result => {
@@ -50,6 +42,13 @@ export default class TaskManager extends LightningElement {
             console.log('Error moving task!');
             console.log(error);
         });
+
+        // Remove dropped task from its current task list
+        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask);
+        // Add dropped task to target task list
+        updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
+        // Update local task lists
+        this.taskLists = updatedTaskLists;
         
     }
 
@@ -65,10 +64,9 @@ export default class TaskManager extends LightningElement {
         // console.log(event.detail);
         let taskFields = event.detail;
 
-        let updatedTaskLists = this.taskLists;
+        let updatedTaskLists = JSON.parse(JSON.stringify(this.taskLists));
         updatedTaskLists = this.updateTargetTask(updatedTaskLists, taskFields);
         
-
         this.taskLists = updatedTaskLists;
     }
 
@@ -106,7 +104,7 @@ export default class TaskManager extends LightningElement {
 
         result.some(list => {
             // Find updated task's list
-            if(list.taskListId == taskFields.taskListId)
+            if(list.taskListId === taskFields.taskListId)
             {
                 // Find and update task
                 list.taskList.some(task => {
@@ -114,11 +112,12 @@ export default class TaskManager extends LightningElement {
                     {
                         task.taskName = taskFields.Name;
                         task.description = taskFields.Description__c;
+                        console.log('Updated task: ' + task.taskId);
                         return true;
                     }
                 });
+                return true;
             }
-            return true;
         });
 
         return result;
