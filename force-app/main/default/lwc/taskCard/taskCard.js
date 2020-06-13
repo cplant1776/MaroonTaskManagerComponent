@@ -4,6 +4,9 @@ export default class TaskCard extends LightningElement {
     @api task;
     @track openModal=false;
 
+    modalObjectApiName='To_Do_Task__c';
+    modalFields=['Name', 'Description__c'];
+
     handleDragStart()
     {
         console.log('taskCard :: start drag => ' + this.task.taskId);

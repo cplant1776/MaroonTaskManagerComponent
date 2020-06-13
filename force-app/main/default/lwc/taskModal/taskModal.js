@@ -1,7 +1,12 @@
 import { LightningElement, api } from 'lwc';
 
 export default class TaskModal extends LightningElement {
-    @api task
+    @api task;
+    @api title;
+    @api mode;
+
+    @api objectApiName;
+    @api fields;
 
     handleReset(event)
     {
@@ -16,5 +21,10 @@ export default class TaskModal extends LightningElement {
 
         const cancelModalEvent = new CustomEvent('cancelmodal');
         this.dispatchEvent(cancelModalEvent);
+    }
+
+    get isEdit()
+    {
+        return this.mode === 'edit';
     }
 }
