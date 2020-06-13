@@ -65,25 +65,9 @@ export default class TaskManager extends LightningElement {
         // console.log(event.detail);
         let taskFields = event.detail;
 
-        // TODO: SOMETHING IS WRONG WITH THE RETURN ON THIS...
-        // TRYING TO UPDATE TASK PASSED UP IN EVENT.DETAIL
         let updatedTaskLists = this.taskLists;
-        updatedTaskLists.some(list => {
-            // Find updated task's list
-            if(list.taskListId == taskFields.taskListId)
-            {
-                // Find and update task
-                list.taskList.some(task => {
-                    if(task.taskId == taskFields.taskId)
-                    {
-                        task.taskName = taskFields.Name;
-                        task.description = taskFields.Description__c;
-                        return true;
-                    }
-                });
-            }
-            return true;
-        });
+        updatedTaskLists = this.updateTargetTask(updatedTaskLists, taskFields);
+        
 
         this.taskLists = updatedTaskLists;
     }
@@ -111,6 +95,30 @@ export default class TaskManager extends LightningElement {
                 list.taskList.push(droppedTask);
                 return true;
             }
+        });
+
+        return result;
+    }
+
+    updateTargetTask(taskLists, taskFields)
+    {
+        let result = taskLists;
+
+        result.some(list => {
+            // Find updated task's list
+            if(list.taskListId == taskFields.taskListId)
+            {
+                // Find and update task
+                list.taskList.some(task => {
+                    if(task.taskId == taskFields.taskId)
+                    {
+                        task.taskName = taskFields.Name;
+                        task.description = taskFields.Description__c;
+                        return true;
+                    }
+                });
+            }
+            return true;
         });
 
         return result;
