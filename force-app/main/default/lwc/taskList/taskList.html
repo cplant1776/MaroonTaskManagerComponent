@@ -1,7 +1,7 @@
 <!-- Individual List -->
 <template>
     <div class="container" ondragover={handleDragOver} ondrop={handleDrop}>
-        <lightning-layout horizontal-align="spaced" multiple-rows="true">
+        <lightning-layout horizontal-align="center" multiple-rows="true">
 
             <!-- List Header -->
             <lightning-layout-item size="12" class="slds-p-right_small">
@@ -35,8 +35,19 @@
                 </template>
             </lightning-layout-item>
 
+            <!-- Add Task Button -->
+            <lightning-layout-item size="12" padding="around-small">
+                <div class="slds-align_absolute-center">
+                    <lightning-button-icon icon-name="utility:add" variant="bare" alternative-text="Add Todo Task" title="Add Todo Task"></lightning-button-icon>
+                </div>
+            </lightning-layout-item>
+
         </lightning-layout>
     </div>
+
+    <template if:true={openNewTaskModal}>
+        <c-task-modal task={task} onsubmit={handleSubmitModal} oncancelmodal={handleCancelModal}></c-task-modal>
+    </template>
 </template>
 
 

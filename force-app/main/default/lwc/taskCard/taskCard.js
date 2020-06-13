@@ -35,4 +35,9 @@ export default class TaskCard extends LightningElement {
         console.log('taskCard :: handleCancelModal');
         this.openModal = false;
     }
+
+    handleDoNothing()
+    {
+        event.stopPropagation();
+    }
 }
