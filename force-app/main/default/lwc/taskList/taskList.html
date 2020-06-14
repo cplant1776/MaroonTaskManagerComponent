@@ -1,5 +1,12 @@
 <!-- Individual List -->
 <template>
+
+    <!-- Create Task modal -->
+    <template if:true={openModal}>
+        <c-task-modal mode='create' task-list-id={taskListId} object-api-name={createModalObjectApiName}
+        fields={createModalFields}  onsuccess={handleCreateModal} oncancelmodal={handleCloseModal}></c-task-modal>
+    </template>
+
     <div class="container" ondragover={handleDragOver} ondrop={handleDrop}>
         <lightning-layout horizontal-align="center" multiple-rows="true">
 
@@ -38,16 +45,14 @@
             <!-- Add Task Button -->
             <lightning-layout-item size="12" padding="around-small">
                 <div class="slds-align_absolute-center">
-                    <lightning-button-icon icon-name="utility:add" variant="bare" alternative-text="Add Todo Task" title="Add Todo Task"></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:add" variant="bare" alternative-text="Add Todo Task" 
+                    title="Add Todo Task" onclick={handleOpenModal}></lightning-button-icon>
                 </div>
             </lightning-layout-item>
 
         </lightning-layout>
     </div>
 
-    <template if:true={openNewTaskModal}>
-        <c-task-modal task={task} onsubmit={handleSubmitModal} oncancelmodal={handleCancelModal}></c-task-modal>
-    </template>
 </template>
 
 

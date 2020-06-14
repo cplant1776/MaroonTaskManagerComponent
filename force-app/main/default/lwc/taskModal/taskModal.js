@@ -1,12 +1,19 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 
 export default class TaskModal extends LightningElement {
     @api task;
-    @api title;
     @api mode;
+    @api taskListId;
+
+    @track title;
 
     @api objectApiName;
     @api fields;
+
+    connectedCallback()
+    {
+        this.title = (this.task === undefined) ? 'New Task' : this.task.taskName;
+    }
 
     handleReset(event)
     {
@@ -23,8 +30,19 @@ export default class TaskModal extends LightningElement {
         this.dispatchEvent(cancelModalEvent);
     }
 
+    handleClose()
+    {
+        const cancelModalEvent = new CustomEvent('cancelmodal');
+        this.dispatchEvent(cancelModalEvent);
+    }
+
     get isEdit()
     {
         return this.mode === 'edit';
+    }
+
+    get isCreate()
+    {
+        return this.mode === 'create';
     }
 }

@@ -70,6 +70,24 @@ export default class TaskManager extends LightningElement {
         this.taskLists = updatedTaskLists;
     }
 
+    handleCreateTask(event)
+    {
+        console.log('taskManager :: handleCreateTask');
+        let newTaskFields = event.detail.fields;
+
+        let targetListId = newTaskFields.To_Do_List__c.value;
+        let newTask = {
+            taskId: event.detail.id,
+            taskName: newTaskFields.Name.value,
+            description: newTaskFields.Description__c.value,
+        }
+
+        // Add dropped task to target task list
+        let updatedTaskLists = this.addDroppedTaskToTargetList(this.taskLists, targetListId, newTask);
+        // Update local task lists
+        this.taskLists = updatedTaskLists;
+    }
+
     filterOutTargetTask(taskLists, droppedTask)
     {
         // Remove dropped task from its current task list
