@@ -1,4 +1,11 @@
 <template>
+
+    <!-- Todo List modal -->
+    <template if:true={openModal}>
+        <c-task-list-modal object-api-name={listModalObjectApiName} list={selectedList}
+        oncreatelist={handleModalSubmit} oncancelmodal={handleCloseListModal}></c-task-list-modal>
+    </template>
+
     <div class="container">
         <lightning-layout>
         <template for:each={taskLists} for:item="taskList">
@@ -6,6 +13,14 @@
             task-list-id={taskList.taskListId} onlistitemdrag={handleListItemDrag} onsubmitmodal={handleSubmitModal}
             onitemdrop={handleItemDrop} oncreatetask={handleCreateTask}></c-task-list>
         </template>
+
+        <!-- Add List Button -->
+        <lightning-layout-item padding="around-small">
+            <div>
+                <lightning-button-icon icon-name="action:new" variant="brand" alternative-text="Add Todo List" 
+                title="Add Todo List" onclick={handleCreateListModal}></lightning-button-icon>
+            </div>
+        </lightning-layout-item>
         </lightning-layout>
     </div>
 </template>

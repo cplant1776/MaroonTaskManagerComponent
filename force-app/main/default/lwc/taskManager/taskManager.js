@@ -4,7 +4,13 @@ import moveTodoTask from '@salesforce/apex/TaskManagerController.moveTodoTask';
 
 export default class TaskManager extends LightningElement {
     @track taskLists = [];
+    @track openModal=false;
+
     draggingTask;
+    listModalMode;
+    selectedList;
+
+    listModalObjectApiName='To_Do_List__c';
 
     connectedCallback()
     {
@@ -88,6 +94,50 @@ export default class TaskManager extends LightningElement {
         this.taskLists = updatedTaskLists;
     }
 
+    handleModalSubmit(event)
+    {
+        let listFields = JSON.parse(JSON.stringify(event.detail.fields));
+        console.log(listFields);
+        
+        let currentList = {
+            listName: listFields.Name.value,
+            listId: listFields.id,
+            taskList: []
+        }
+
+        console.log('currentList:');
+        console.log(currentList);
+        
+
+        if(this.listModalMode === 'create')
+        {
+            console.log('mode is create');
+            this.taskLists.push(currentList);
+
+        } else if(this.listModalMode === 'edit')
+        {
+            this.updateTargetList(this.taskLists, currentList);
+        }
+
+        this.resetModalParams();
+    }
+
+    handleCreateListModal()
+    {
+        console.log('taskManager :: handleCreateListModal');
+
+        this.listModalMode = 'create';
+        this.selectedList = null;
+        this.openModal = true;
+    }
+
+    handleCloseListModal(event)
+    {
+        console.log('taskManager :: handleCloseListModal');
+
+        this.resetModalParams()
+    }
+
     filterOutTargetTask(taskLists, droppedTask)
     {
         // Remove dropped task from its current task list
@@ -139,5 +189,23 @@ export default class TaskManager extends LightningElement {
         });
 
         return result;
+    }
+
+    updateTargetList(taskLists, currentList)
+    {
+        taskLists.some(list => {
+            if(list.listId === currentList.id)
+            {
+                list.listName = currentList.listname;
+            }
+            return true;
+        });
+    }
+
+    resetModalParams()
+    {
+        this.listModalMode = null;
+        this.selectedList = null;
+        this.openModal = false;
     }
 }
