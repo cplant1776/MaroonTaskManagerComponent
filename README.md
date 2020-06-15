@@ -4,11 +4,11 @@
 
 ## TLDR
 
-![Drag and drop/delete tasks](docs\media\drag_n_drop.gif)
+![Drag and drop/delete tasks](https://media.giphy.com/media/kdc6abXcoH6xtX0v7k/giphy.gif)
 
-![Create tasks](docs\media\create_task.gif)
+![Create tasks](https://media.giphy.com/media/YOqc1yH9ZE5TOKQYKq/giphy.gif)
 
-![Create lists](docs\media\create_list.gif)
+![Create lists](https://media.giphy.com/media/S8O203VC4Ysf9gMvMq/giphy.gif)
 
 ## Current TODO
 
