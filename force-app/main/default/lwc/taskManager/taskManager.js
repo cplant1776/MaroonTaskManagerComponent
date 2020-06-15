@@ -87,6 +87,9 @@ export default class TaskManager extends LightningElement {
             taskName: newTaskFields.Name.value,
             description: newTaskFields.Description__c.value,
         }
+        console.log('newTask:');
+        console.log(newTask);
+        
 
         // Add dropped task to target task list
         let updatedTaskLists = this.addDroppedTaskToTargetList(this.taskLists, targetListId, newTask);
@@ -96,29 +99,33 @@ export default class TaskManager extends LightningElement {
 
     handleModalSubmit(event)
     {
+        console.log('taskManager :: handleModalSubmit');
         let listFields = JSON.parse(JSON.stringify(event.detail.fields));
-        console.log(listFields);
         
         let currentList = {
             listName: listFields.Name.value,
-            listId: listFields.id,
+            taskListId: event.detail.id,
             taskList: []
         }
 
-        console.log('currentList:');
+        console.log('new list:');
         console.log(currentList);
+        let updatedTaskLists = this.taskLists;
         
 
         if(this.listModalMode === 'create')
         {
-            console.log('mode is create');
-            this.taskLists.push(currentList);
+            console.log('mode = create');
+            updatedTaskLists.push(currentList);
 
         } else if(this.listModalMode === 'edit')
         {
             this.updateTargetList(this.taskLists, currentList);
         }
 
+        this.taskLists = updatedTaskLists;
+        console.log(this.taskLists);
+        
         this.resetModalParams();
     }
 
