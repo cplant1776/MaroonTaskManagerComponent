@@ -6,12 +6,13 @@
         oncreatelist={handleModalSubmit} oncancelmodal={handleCloseListModal}></c-task-list-modal>
     </template>
 
+    <!-- Task Lists -->
     <div class="container">
         <lightning-layout>
         <template for:each={taskLists} for:item="taskList">
             <c-task-list key={taskList.taskListId} list-name={taskList.listName} task-list={taskList.taskList}
             task-list-id={taskList.taskListId} onlistitemdrag={handleListItemDrag} onsubmitmodal={handleSubmitModal}
-            onitemdrop={handleItemDrop} oncreatetask={handleCreateTask}></c-task-list>
+            onitemdrop={handleItemDrop} oncreatetask={handleCreateTask} ondeletetask={handleDeleteTask}></c-task-list>
         </template>
 
         <!-- Add List Button -->

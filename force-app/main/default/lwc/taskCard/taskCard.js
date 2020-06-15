@@ -39,8 +39,16 @@ export default class TaskCard extends LightningElement {
         this.openModal = false;
     }
 
-    handleDoNothing()
+    handleDoNothing(event)
     {
-        event.stopPropagation();
+        event.stopPropagation(); // Prevent parent's onclick div from propogating
+    }
+
+    handleDeleteTask(event)
+    {
+        console.log('taskCard :: handleDeleteTask');
+                
+        const deleteTaskEvent = new CustomEvent('deletetask', {detail: this.task.taskId});
+        this.dispatchEvent(deleteTaskEvent);
     }
 }

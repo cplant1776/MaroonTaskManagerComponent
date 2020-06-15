@@ -56,4 +56,19 @@ public with sharing class TaskManagerController_TEST {
         System.assertEquals(NUM_OF_TASKS_LIST_1 - 1, oldList.To_Do_Tasks__r.size());
         System.assertEquals(NUM_OF_TASKS_LIST_2 + 1, newList.To_Do_Tasks__r.size());
     }
+
+    @isTest
+    static void doesDeleteTodoTaskRemoveTask()
+    {
+        To_Do_Task__c taskToDelete = [SELECT Id FROM To_Do_Task__c WHERE Name = 'Task 1'];
+        To_Do_List__c taksList = [SELECT Id FROM To_Do_List__c WHERE Name = 'List1'];
+
+        Test.startTest();
+        TaskManagerController.deleteTodoTask(taskToDelete.Id);
+        Test.stopTest();
+
+        To_Do_List__c updatedTaskList = [SELECT Id, (SELECT Id FROM To_Do_Tasks__r) FROM To_Do_List__c WHERE Name = 'List1'];
+
+        System.assertEquals(NUM_OF_TASKS_LIST_1 - 1, updatedTaskList.To_Do_Tasks__r.size());
+    }
 }

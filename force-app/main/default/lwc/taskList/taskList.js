@@ -70,6 +70,20 @@ export default class TaskList extends LightningElement {
         this.dispatchEvent(taskCreatedEvent);
     }
 
+    handleDeleteTask(event)
+    {
+        console.log('taskList :: handleDeleteTask');
+
+        let updatedDetail = {
+            taskId: event.detail,
+            taskListId: this.taskListId
+        }
+
+        const deleteTaskEvent = new CustomEvent('deletetask', {detail: updatedDetail});
+        this.dispatchEvent(deleteTaskEvent);
+        
+    }
+
     handleOpenModal()
     {
         this.openModal = true;

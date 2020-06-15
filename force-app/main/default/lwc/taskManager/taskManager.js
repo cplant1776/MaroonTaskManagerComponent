@@ -1,6 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import getUserToDoLists from '@salesforce/apex/TaskManagerController.getUserToDoLists';
 import moveTodoTask from '@salesforce/apex/TaskManagerController.moveTodoTask';
+import deleteTodoTask from '@salesforce/apex/TaskManagerController.deleteTodoTask';
 
 export default class TaskManager extends LightningElement {
     @track taskLists = [];
@@ -50,7 +51,7 @@ export default class TaskManager extends LightningElement {
         });
 
         // Remove dropped task from its current task list
-        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask);
+        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask.taskId);
         // Add dropped task to target task list
         updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
         // Update local task lists
@@ -145,13 +146,34 @@ export default class TaskManager extends LightningElement {
         this.resetModalParams()
     }
 
-    filterOutTargetTask(taskLists, droppedTask)
+    handleDeleteTask(event)
+    {
+        console.log('taskManager :: handleDeleteTask');
+        let originListId = event.detail.taskListId;
+        let deletedTaskId = event.detail.taskId;
+        
+        // Delete task in database
+        deleteTodoTask({taskId: deletedTaskId}).then(result => {
+            console.log('Successfully deleted task.');
+            console.log(result);
+        }).catch(error => {
+            console.log('Error deleting task!');
+            console.log(error);
+        });
+
+        // Delete from local view
+        let updatedTaskLists = JSON.parse(JSON.stringify(this.taskLists));
+        updatedTaskLists = this.filterOutTargetTask(updatedTaskLists, deletedTaskId);
+        this.taskLists = updatedTaskLists;
+    }
+
+    filterOutTargetTask(taskLists, droppedTaskId)
     {
         // Remove dropped task from its current task list
         let result = taskLists.map(list => {
             // Filter out task if present in list
             list.taskList = list.taskList.filter(task => {
-                return task.taskId == droppedTask.taskId ? false : true;         
+                return task.taskId == droppedTaskId ? false : true;         
             });
             return list;
         });
