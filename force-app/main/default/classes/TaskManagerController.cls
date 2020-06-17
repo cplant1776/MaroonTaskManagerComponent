@@ -86,4 +86,14 @@ public with sharing class TaskManagerController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled
+    public static void deleteTodoList(Id taskListId){
+        try{
+            System.Database.delete(taskListId);
+        } catch (Exception e) {
+            System.debug('Failed deleting task list: ' + e.getMessage());
+            throw new AuraHandledException(e.getMessage());
+        } 
+    }
 }

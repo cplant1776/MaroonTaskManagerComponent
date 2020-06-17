@@ -12,8 +12,6 @@
 
 ## Current TODO
 
-* Add delete option to dropdown menu for lists
-* Add after delete trigger to delete user lists associated with deleted task lists
 * Allow reordering within lists via drag and drop
 * Wrist JS tests
 * Reafactor

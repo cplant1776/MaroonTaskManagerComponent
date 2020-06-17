@@ -16,7 +16,6 @@ export default class TaskListModal extends LightningElement {
             this.title = this.list.listName;
         }
         // this.title = (this.list === null) ? 'New Todo List' : this.list.listName;
-        console.log('x');
     }
 
     handleReset(event)

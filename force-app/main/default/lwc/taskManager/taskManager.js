@@ -2,6 +2,7 @@ import { LightningElement, track } from 'lwc';
 import getUserToDoLists from '@salesforce/apex/TaskManagerController.getUserToDoLists';
 import moveTodoTask from '@salesforce/apex/TaskManagerController.moveTodoTask';
 import deleteTodoTask from '@salesforce/apex/TaskManagerController.deleteTodoTask';
+import deleteTodoList from '@salesforce/apex/TaskManagerController.deleteTodoList';
 
 export default class TaskManager extends LightningElement {
     @track taskLists = [];
@@ -166,6 +167,32 @@ export default class TaskManager extends LightningElement {
         updatedTaskLists = this.filterOutTargetTask(updatedTaskLists, deletedTaskId);
         this.taskLists = updatedTaskLists;
     }
+    
+    handleDeleteList(event)
+    {
+        console.log('taskManager :: handleDeleteList');
+
+        let deletedListId = event.detail;
+        console.log('detail:');
+        console.log(deletedListId);
+
+        // Delete list in database
+        deleteTodoList({taskListId: deletedListId}).then(result => {
+            console.log('Successfully deleted list.');
+            console.log(result);
+        }).catch(error => {
+            console.log('Error deleting list!');
+            console.log(error);
+        });
+
+        // Delete from local view
+        let updatedTaskLists = JSON.parse(JSON.stringify(this.taskLists));
+        console.log('updatedTaskLists');
+        console.log(updatedTaskLists);
+        
+        updatedTaskLists = this.filterOutTargetTaskList(updatedTaskLists, deletedListId);
+        this.taskLists = updatedTaskLists;
+    }
 
     filterOutTargetTask(taskLists, droppedTaskId)
     {
@@ -176,6 +203,15 @@ export default class TaskManager extends LightningElement {
                 return task.taskId == droppedTaskId ? false : true;         
             });
             return list;
+        });
+
+        return result;
+    }
+
+    filterOutTargetTaskList(taskLists, droppedTaskListId)
+    {
+        let result = taskLists.filter(list => {
+            return list.taskListId === droppedTaskListId ? false : true;
         });
 
         return result;

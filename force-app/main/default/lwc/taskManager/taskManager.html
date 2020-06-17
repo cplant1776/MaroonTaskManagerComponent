@@ -12,7 +12,8 @@
         <template for:each={taskLists} for:item="taskList">
             <c-task-list key={taskList.taskListId} list-name={taskList.listName} task-list={taskList.taskList}
             task-list-id={taskList.taskListId} onlistitemdrag={handleListItemDrag} onsubmitmodal={handleSubmitModal}
-            onitemdrop={handleItemDrop} oncreatetask={handleCreateTask} ondeletetask={handleDeleteTask}></c-task-list>
+            onitemdrop={handleItemDrop} oncreatetask={handleCreateTask} ondeletetask={handleDeleteTask}
+            ondeletelist={handleDeleteList}></c-task-list>
         </template>
 
         <!-- Add List Button -->
