@@ -42,29 +42,19 @@ export default class TaskManager extends LightningElement {
         console.log('taskManager :: handleItemDrop');        
         console.log('dragging task: ' + this.draggingTask.taskId + ' | dropped position Id: ' + droppedPositionId);
         
-        let updatedTaskLists = this.moveTaskPosition(this.taskLists, this.draggingTask, droppedPositionId)
+        // Update local view
+        let updatedTaskLists = this.taskLists;
+        let targetPosition = this.moveTaskPosition(this.taskLists, this.draggingTask, droppedPositionId)
 
-        /*
-        let targetListId = event.detail;
-        let droppedTask = this.draggingTask;
-        console.log('taskManager :: handleItemDrop => ' +  targetListId);
-        
-        // Update task list in database
-        moveTodoTask({taskId: droppedTask.taskId, targetListId: targetListId}).then(result => {
+        // Update positions in database
+        moveTodoTask({movedTaskId: this.draggingTask.taskId, targetListId: targetPosition.taskListId,
+            targetPosition: targetPosition.index}).then(result => {
             console.log('Successfully moved task.');
             console.log(result);
         }).catch(error => {
             console.log('Error moving task!');
             console.log(error);
         });
-
-        // Remove dropped task from its current task list
-        let updatedTaskLists = this.filterOutTargetTask(this.taskLists, droppedTask.taskId);
-        // Add dropped task to target task list
-        updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
-        // Update local task lists
-        this.taskLists = updatedTaskLists;
-        */
 
         this.taskLists = updatedTaskLists;
     }
@@ -291,43 +281,16 @@ export default class TaskManager extends LightningElement {
 
     moveTaskPosition(taskLists, taskToMove, targetPositionId)
     {
-        let result = taskLists;
-
         // Find position to move task to
-        for(let i=0; i < taskLists.length; i++)
-        {
-            for(let j=0; j < taskLists[i].taskList.length; j++)
-            {
-                if(taskLists[i].taskList[j].taskId == targetPositionId)
-                {
-                    var targetPosition = {
-                        taskListId: taskLists[i].taskListId,
-                        index: j
-                    };
-                }
-            }
-        }
-
-        console.log('targetListId: ' + targetPosition.targetListId);
-        console.log('targetIndex: ' + targetPosition.index);
+        let targetPosition = this.findListPositionByTaskId(taskLists, targetPositionId);
         
-
         // Remove task from original location
-        console.log('Before remove:');
-        console.log(JSON.parse(JSON.stringify(result)));
-
-        this.filterOutTargetTask(result, taskToMove.taskId);
-
-        console.log('After remove:');
-        console.log(JSON.parse(JSON.stringify(result)));
+        this.filterOutTargetTask(taskLists, taskToMove.taskId);
 
         // Add task to new location
-        this.addTaskToTargetPosition(result, taskToMove, targetPosition);
+        this.addTaskToTargetPosition(taskLists, taskToMove, targetPosition);
 
-        console.log('After move:');
-        console.log(JSON.parse(JSON.stringify(result)));
-
-        return result;
+        return targetPosition;
     }
 
     resetModalParams()
@@ -335,5 +298,25 @@ export default class TaskManager extends LightningElement {
         this.listModalMode = null;
         this.selectedList = null;
         this.openModal = false;
+    }
+
+    findListPositionByTaskId(taskLists, targetTaskId)
+    {
+        // Find position to move task to
+        for(let i=0; i < taskLists.length; i++)
+        {
+            for(let j=0; j < taskLists[i].taskList.length; j++)
+            {
+                if(taskLists[i].taskList[j].taskId == targetTaskId)
+                {
+                    var targetPosition = {
+                        taskListId: taskLists[i].taskListId,
+                        index: j
+                    };
+
+                    return targetPosition;
+                }
+            }
+        }
     }
 }

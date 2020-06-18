@@ -61,23 +61,6 @@ public with sharing class TaskManagerController {
         return result;
     }
 
-    // @AuraEnabled
-    // public static void moveTodoTask(Id taskId, Id targetListId){
-
-    //     try{
-    //         System.debug('Try updating task:' + taskId);
-    //         To_Do_Task__c task = [SELECT Id, To_Do_List__c FROM To_Do_Task__c
-    //         WHERE Id = :taskId LIMIT 1];
-    
-    //         task.To_Do_List__c = targetListId;
-    //         upsert task;
-    //     } catch (Exception e)
-    //     {
-    //         System.debug('Failed updating task: ' + e.getMessage());
-    //         throw new AuraHandledException(e.getMessage());
-    //     }
-    // }
-
     @AuraEnabled
     public static void deleteTodoTask(Id taskId){
         try{
