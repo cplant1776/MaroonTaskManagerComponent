@@ -4,14 +4,13 @@
 
 ## TLDR
 
-![Drag and drop/delete tasks](https://media.giphy.com/media/kdc6abXcoH6xtX0v7k/giphy.gif)
+![Drag and drop/delete tasks](https://media.giphy.com/media/PlsZE7Ruq3altyBJDk/giphy.gif)
 
-![Create tasks](https://media.giphy.com/media/YOqc1yH9ZE5TOKQYKq/giphy.gif)
+![Create tasks](https://media.giphy.com/media/mA7hp81aKpU1CIWL9n/giphy.gif)
 
-![Create lists](https://media.giphy.com/media/S8O203VC4Ysf9gMvMq/giphy.gif)
+![Create lists](https://media.giphy.com/media/Z9z2cpbORhQVspaeix/giphy.gif)
 
 ## Current TODO
 
-* Allow reordering within lists via drag and drop
 * Wrist JS tests
-* Reafactor
+* Refactor
