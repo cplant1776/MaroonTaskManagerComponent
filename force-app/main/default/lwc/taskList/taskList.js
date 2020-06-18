@@ -8,7 +8,7 @@ export default class TaskList extends LightningElement {
     @track openModal=false;
 
     createModalObjectApiName='To_Do_Task__c';
-    createModalFields=['Name', 'Description__c', 'To_Do_List__c'];
+    createModalFields;
 
     connectedCallback()
     {
@@ -41,11 +41,12 @@ export default class TaskList extends LightningElement {
         event.preventDefault();
     }
 
-    handleDrop()
+    handleItemDrop(event)
     {
-        console.log('taskList :: item drop');
-        const itemDropEvent = new CustomEvent('itemdrop', {detail: this.taskListId});
-        this.dispatchEvent(itemDropEvent);
+        console.log('taskList :: item drop');        
+
+        const itemDragEvent = new CustomEvent('itemdrop', {detail: event.detail});
+        this.dispatchEvent(itemDragEvent);
     }
 
     handleSubmitModal(event)
@@ -91,6 +92,11 @@ export default class TaskList extends LightningElement {
         const deleteListEvent = new CustomEvent('deletelist', {detail: this.taskListId});
         this.dispatchEvent(deleteListEvent);
         
+    }
+
+    handleTester()
+    {
+        console.log('oh boy');
     }
 
     handleOpenModal()

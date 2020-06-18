@@ -6,7 +6,8 @@ public with sharing class TaskManagerController {
         Set<Id> userSpecificTodoListIds = getUserSpecificTodoListIds();
 
         List<To_Do_List__c> todoLists = [SELECT Id, Name,
-        (SELECT Id, Name, Description__c FROM To_Do_Tasks__r)
+        (SELECT Id, Name, Description__c FROM To_Do_Tasks__r
+        ORDER BY List_Position__c)
         FROM To_Do_List__c
         WHERE Id IN :userSpecificTodoListIds];
 
@@ -60,22 +61,22 @@ public with sharing class TaskManagerController {
         return result;
     }
 
-    @AuraEnabled
-    public static void moveTodoTask(Id taskId, Id targetListId){
+    // @AuraEnabled
+    // public static void moveTodoTask(Id taskId, Id targetListId){
 
-        try{
-            System.debug('Try updating task:' + taskId);
-            To_Do_Task__c task = [SELECT Id, To_Do_List__c FROM To_Do_Task__c
-            WHERE Id = :taskId LIMIT 1];
+    //     try{
+    //         System.debug('Try updating task:' + taskId);
+    //         To_Do_Task__c task = [SELECT Id, To_Do_List__c FROM To_Do_Task__c
+    //         WHERE Id = :taskId LIMIT 1];
     
-            task.To_Do_List__c = targetListId;
-            upsert task;
-        } catch (Exception e)
-        {
-            System.debug('Failed updating task: ' + e.getMessage());
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
+    //         task.To_Do_List__c = targetListId;
+    //         upsert task;
+    //     } catch (Exception e)
+    //     {
+    //         System.debug('Failed updating task: ' + e.getMessage());
+    //         throw new AuraHandledException(e.getMessage());
+    //     }
+    // }
 
     @AuraEnabled
     public static void deleteTodoTask(Id taskId){
@@ -95,5 +96,46 @@ public with sharing class TaskManagerController {
             System.debug('Failed deleting task list: ' + e.getMessage());
             throw new AuraHandledException(e.getMessage());
         } 
+    }
+
+    @AuraEnabled
+    public static void moveTodoTask(Id movedTaskId, Id targetListId, Integer targetPosition){
+
+        try{
+            System.debug('Try shifting tasks');
+            shiftExistingTasks(targetListId, targetPosition);
+
+            System.debug('Try updating task:' + movedTaskId);
+            moveTaskToList(movedTaskId, targetListId, targetPosition);
+
+        } catch (Exception e)
+        {
+            System.debug('Failed updating task: ' + e.getMessage());
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    private static void shiftExistingTasks(Id targetListId, Integer insertedPosition)
+    {
+        // Grab tasks listed after inserted task
+        List<To_Do_Task__c> tasksToShift = [SELECT Id, List_Position__c FROM To_Do_Task__c
+                                            WHERE To_Do_List__c = :targetListId
+                                            AND List_Position__c >= :insertedPosition];
+        for(To_Do_Task__c eachTask : tasksToShift)
+        {
+            eachTask.List_Position__c += 1;
+        }
+
+        update tasksToShift;
+    }
+
+    private static void moveTaskToList(Id movedTaskId, Id targetListId, Integer targetPosition)
+    {
+        To_Do_Task__c task = [SELECT Id, To_Do_List__c FROM To_Do_Task__c
+            WHERE Id = :movedTaskId LIMIT 1];
+    
+        task.To_Do_List__c = targetListId;
+        task.List_Position__c = targetPosition;
+        upsert task;
     }
 }

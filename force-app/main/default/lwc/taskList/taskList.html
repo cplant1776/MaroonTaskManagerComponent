@@ -7,7 +7,7 @@
         fields={createModalFields}  onsuccess={handleCreateModal} oncancelmodal={handleCloseModal}></c-task-modal>
     </template>
 
-    <div class="container" ondragover={handleDragOver} ondrop={handleDrop}>
+    <div class="container">
         <lightning-layout horizontal-align="center" multiple-rows="true">
 
             <!-- List Header -->
@@ -35,7 +35,7 @@
             <template for:each={taskList} for:item="task">
                 <lightning-layout-item key={task.description} size="12">
                     <c-task-card key={task.description} task={task} onitemdrag={handleItemDrag} onsubmitmodal={handleSubmitModal}
-                    ondeletetask={handleDeleteTask}></c-task-card>
+                    ondeletetask={handleDeleteTask} onitemdrop={handleItemDrop}></c-task-card>
                 </lightning-layout-item>
         </template>
 

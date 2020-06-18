@@ -10,6 +10,7 @@ export default class TaskCard extends LightningElement {
     handleDragStart()
     {
         console.log('taskCard :: start drag => ' + this.task.taskId);
+
         const dragStartEvent = new CustomEvent('itemdrag', {detail: this.task});
         this.dispatchEvent(dragStartEvent);
     }
@@ -17,7 +18,24 @@ export default class TaskCard extends LightningElement {
     handleOpenModal()
     {
         console.log('taskCard :: handleOpenModal');
+
         this.openModal = true;
+    }
+
+    handleDragOver(event)
+    {
+        // console.log('dragging over card');
+        
+        event.preventDefault();
+    }
+
+    handleDrop(event)
+    {
+        console.log('taskCard :: item drop');
+
+        event.preventDefault();
+        const itemDropEvent = new CustomEvent('itemdrop', {detail: this.task.taskId});
+        this.dispatchEvent(itemDropEvent);
     }
 
     handleSubmitModal(event)

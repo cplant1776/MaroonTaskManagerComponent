@@ -38,6 +38,13 @@ export default class TaskManager extends LightningElement {
 
     handleItemDrop(event)
     {
+        let droppedPositionId = event.detail;
+        console.log('taskManager :: handleItemDrop');        
+        console.log('dragging task: ' + this.draggingTask.taskId + ' | dropped position Id: ' + droppedPositionId);
+        
+        let updatedTaskLists = this.moveTaskPosition(this.taskLists, this.draggingTask, droppedPositionId)
+
+        /*
         let targetListId = event.detail;
         let droppedTask = this.draggingTask;
         console.log('taskManager :: handleItemDrop => ' +  targetListId);
@@ -57,7 +64,9 @@ export default class TaskManager extends LightningElement {
         updatedTaskLists = this.addDroppedTaskToTargetList(updatedTaskLists, targetListId, droppedTask);
         // Update local task lists
         this.taskLists = updatedTaskLists;
-        
+        */
+
+        this.taskLists = updatedTaskLists;
     }
 
     handleListItemDrag(event)
@@ -265,6 +274,60 @@ export default class TaskManager extends LightningElement {
             }
             return true;
         });
+    }
+
+    addTaskToTargetPosition(taskLists, taskToMove, targetPosition)
+    {
+        taskLists.some(list => {
+            if(list.taskListId === targetPosition.taskListId)
+            {
+                console.log('attempting move');
+                
+                list.taskList.splice(targetPosition.index, 0, taskToMove);
+                return true;
+            }
+        });
+    }
+
+    moveTaskPosition(taskLists, taskToMove, targetPositionId)
+    {
+        let result = taskLists;
+
+        // Find position to move task to
+        for(let i=0; i < taskLists.length; i++)
+        {
+            for(let j=0; j < taskLists[i].taskList.length; j++)
+            {
+                if(taskLists[i].taskList[j].taskId == targetPositionId)
+                {
+                    var targetPosition = {
+                        taskListId: taskLists[i].taskListId,
+                        index: j
+                    };
+                }
+            }
+        }
+
+        console.log('targetListId: ' + targetPosition.targetListId);
+        console.log('targetIndex: ' + targetPosition.index);
+        
+
+        // Remove task from original location
+        console.log('Before remove:');
+        console.log(JSON.parse(JSON.stringify(result)));
+
+        this.filterOutTargetTask(result, taskToMove.taskId);
+
+        console.log('After remove:');
+        console.log(JSON.parse(JSON.stringify(result)));
+
+        // Add task to new location
+        this.addTaskToTargetPosition(result, taskToMove, targetPosition);
+
+        console.log('After move:');
+        console.log(JSON.parse(JSON.stringify(result)));
+
+        return result;
     }
 
     resetModalParams()
