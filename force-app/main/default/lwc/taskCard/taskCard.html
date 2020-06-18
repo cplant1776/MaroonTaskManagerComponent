@@ -5,7 +5,7 @@
         onsubmit={handleSubmitModal} oncancelmodal={handleCancelModal}></c-task-modal>
     </template>
 
-    <div draggable="true" ondragstart={handleDragStart} onclick={handleOpenModal}>
+    <div draggable="true" ondragstart={handleDragStart} onclick={handleOpenModal} class="task-spacer">
         <lightning-card  title={task.description} draggable="true">
             <!-- Header -->
             <lightning-button-menu alternative-text="Show menu" slot="actions" onclick={handleDoNothing}> <!-- onclick prevents parent div's onclick-->

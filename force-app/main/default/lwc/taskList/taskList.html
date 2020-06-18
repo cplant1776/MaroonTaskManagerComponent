@@ -32,12 +32,12 @@
             </lightning-layout-item>
 
             <!-- Task -->
-            <lightning-layout-item size="12" padding="around-small">
-                <template for:each={taskList} for:item="task">
+            <template for:each={taskList} for:item="task">
+                <lightning-layout-item key={task.description} size="12">
                     <c-task-card key={task.description} task={task} onitemdrag={handleItemDrag} onsubmitmodal={handleSubmitModal}
                     ondeletetask={handleDeleteTask}></c-task-card>
-                </template>
-            </lightning-layout-item>
+                </lightning-layout-item>
+        </template>
 
             <!-- Add Task Button -->
             <lightning-layout-item size="12" padding="around-small">
