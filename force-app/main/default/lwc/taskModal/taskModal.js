@@ -3,7 +3,6 @@ import { LightningElement, api, track } from 'lwc';
 export default class TaskModal extends LightningElement {
     @api task;
     @api mode;
-    @api taskListId;
 
     @track title;
 
@@ -15,7 +14,7 @@ export default class TaskModal extends LightningElement {
         this.title = (this.task === undefined) ? 'New Task' : this.task.taskName;
     }
 
-    handleReset(event)
+    handleReset()
     {
         const inputFields = this.template.querySelectorAll(
             'lightning-input-field'
@@ -24,7 +23,7 @@ export default class TaskModal extends LightningElement {
             inputFields.forEach(field => {
                 field.reset();
             });
-        };
+        }
 
         const cancelModalEvent = new CustomEvent('cancelmodal');
         this.dispatchEvent(cancelModalEvent);
