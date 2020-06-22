@@ -51,7 +51,7 @@ export default class TaskCard extends LightningElement {
         this.dispatchEvent(submitModalEvent);
     }
 
-    handleCancelModal(event)
+    handleCancelModal()
     {
         console.log('taskCard :: handleCancelModal');
         this.openModal = false;
@@ -62,7 +62,7 @@ export default class TaskCard extends LightningElement {
         event.stopPropagation(); // Prevent parent's onclick div from propogating
     }
 
-    handleDeleteTask(event)
+    handleDeleteTask()
     {
         console.log('taskCard :: handleDeleteTask');
                 

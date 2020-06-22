@@ -10,7 +10,7 @@
         <lightning-card  title={task.description}>
             <!-- Header -->
             <lightning-button-menu alternative-text="Show menu" slot="actions" onclick={handleDoNothing}> <!-- onclick prevents parent div's onclick-->
-                <lightning-menu-item value="MenuItemOne" label="Delete" onclick={handleDeleteTask}></lightning-menu-item>
+                <lightning-menu-item class="delete-button" value="Delete" label="Delete" onclick={handleDeleteTask}></lightning-menu-item>
                 <lightning-menu-item value="MenuItemTwo" label="Archive"></lightning-menu-item>
             </lightning-button-menu>
         </lightning-card>
