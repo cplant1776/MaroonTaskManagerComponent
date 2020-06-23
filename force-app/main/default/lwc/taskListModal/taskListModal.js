@@ -3,22 +3,17 @@ import { LightningElement, api, track } from 'lwc';
 export default class TaskListModal extends LightningElement {
     @api list;
     @api objectApiName;
+    // @api mode; TODO: implement edit mode
+    @track mode = 'create';
 
     @track title;
 
     connectedCallback()
-    {        
-        if(this.list === null)
-        {
-            this.title = 'New Todo List';
-        } else
-        {
-            this.title = this.list.listName;
-        }
-        // this.title = (this.list === null) ? 'New Todo List' : this.list.listName;
+    {
+        this.title = (this.mode === 'create') ? 'New Todo List' : this.list.listName;
     }
 
-    handleReset(event)
+    handleReset()
     {
         const inputFields = this.template.querySelectorAll(
             'lightning-input-field'
@@ -50,7 +45,12 @@ export default class TaskListModal extends LightningElement {
 
     get isEdit()
     {
-        return this.list === null ? false : true;
+        return this.mode === 'edit';
+    }
+
+    get isCreate()
+    {
+        return this.mode === 'create';
     }
 
     get listId()
